@@ -115,7 +115,7 @@
       <div>
         <h1>เขียนแอป CRUD ด้วย Flutter + SQLite ให้ทันสอบพรุ่งนี้</h1>
         <p>quiz พรุ่งนี้ให้เขียนแอปเพิ่ม ดู แก้ ลบข้อมูลของ entity ที่อาจารย์กำหนด เว็บนี้สอนจากศูนย์ เริ่มจากแผนการอ่านด้านล่าง</p>
-        <div class="ctas"><a class="btn btn-light" href="#learn" data-go="sec-path">เริ่มเรียน <i class="ph ph-arrow-down"></i></a><a class="btn btn-ghost" href="#practice">ไปฝึก</a></div>
+        <div class="ctas"><a class="btn btn-light" href="#learn" data-go="sec-task">เริ่มเรียน <i class="ph ph-arrow-down"></i></a><a class="btn btn-ghost" href="#practice">ไปฝึก</a></div>
       </div>
       <div>${heroSVG}</div>
     </div></section>
@@ -128,6 +128,7 @@
       </div>
     </div></div>
     <main class="wrap">
+      <div class="lesson" id="sec-task"></div>
       <div class="lesson" id="sec-path"></div>
       <div class="lesson" id="sec-flow"></div>
       <div class="lesson" id="sec-map"></div>
@@ -153,11 +154,49 @@
     const ent = currentEnt();
     const { n, files } = Gen.build(ent, state.mode);
     renderChips();
+    renderTask(ent, n);
     renderPath(n);
     renderFlow(ent, n);
     renderMap(n);
     renderFiles(n, files);
     renderMulti(n);
+  }
+
+  /* ---- section: what the quiz asks ---- */
+  function renderTask(ent, n) {
+    const TY = { String: 'ข้อความ', int: 'จำนวนเต็ม', double: 'ทศนิยม', bool: 'ใช่ / ไม่ใช่', DateTime: 'วันที่' };
+    const todo = [
+      ['เอาโปรเจกต์ตั้งต้นขึ้น repo ของตัวเอง', 'clone จาก URL ที่อาจารย์ให้ สร้าง repo แบบ Private บน GitHub แล้ว push และเพิ่ม nattaponk@nu.ac.th เป็น collaborator'],
+      [`ออกแบบ Model: คลาส ${n.C}`, 'มี id กับทุกฟิลด์ในโจทย์ พร้อม toMap() และ fromMap() แปลงชนิดให้ถูก'],
+      [`ออกแบบ Provider: ${n.Prov}`, `สร้างตาราง ${n.table} และมีเมธอดเพิ่ม อ่าน แก้ ลบ ที่จบด้วย notifyListeners()`],
+      ['ลงทะเบียน provider ใน main.dart', 'ใส่ใน MultiProvider ข้าง provider เดิมของโปรเจกต์'],
+      ['ทำ UI 2 หน้า', `หน้ารายการ${n.th} (มีปุ่มลบ, แตะเพื่อแก้, ปุ่ม +) และหน้าฟอร์มที่ใช้ทั้งเพิ่มและแก้`],
+      ['ทดสอบแล้ว push', 'เพิ่ม แก้ ลบ ได้จริง ปิดแอปแล้วเปิดใหม่ข้อมูลยังอยู่ จากนั้น commit และ push ขึ้น repo'],
+    ];
+    $('#sec-task').innerHTML = `<div class="card">
+      <h2>พรุ่งนี้อาจารย์ให้อะไร และเราต้องส่งอะไร</h2>
+      <p class="lede">สรุปจากประกาศของอาจารย์ ข้อสอบเป็นการเขียนโปรแกรมจริงในเครื่อง 2 ชั่วโมง ไม่มีข้อปรนัย</p>
+      <div class="ask">
+        <div>
+          <h3>สิ่งที่อาจารย์ให้มา</h3>
+          <ul class="give">
+            <li><i class="ph ph-folder-simple"></i><span><b>โปรเจกต์ Flutter ตั้งต้น</b> (แจกเป็น URL ของ repo) ที่ใช้ SQLite + Provider แบบบท 13 อยู่แล้ว เราไม่ต้องสร้างโปรเจกต์เอง</span></li>
+            <li><i class="ph ph-identification-card"></i><span><b>entity ของเรา 1 ตัว</b> แต่ละคนได้ไม่ซ้ำกัน เช่น หนังสือ นิสิต สินค้า พร้อมฟิลด์ที่ต้องมี</span></li>
+            <li><i class="ph ph-prohibit"></i><span><b>กติกา</b> เปิดได้เฉพาะเอกสารประกอบการสอน ห้ามใช้ AI ส่งงานเป็น GitHub repo แบบ Private</span></li>
+          </ul>
+        </div>
+        <div class="paper">
+          <div class="paper-h">ตัวอย่างโจทย์ (สมมติว่าได้ entity ที่เลือกไว้ด้านบน)</div>
+          <p>จงสร้างแอปจัดการข้อมูล<b>${esc(n.th)}</b> (entity <code>${esc(n.C)}</code>) ที่มีข้อมูลดังนี้</p>
+          <table class="tbl ftbl"><tr><th>ฟิลด์</th><th>ชนิด</th><th>ความหมาย</th></tr>${ent.fields.map(([nm, ty, lb]) => `<tr><td><code>${nm}</code></td><td>${TY[ty]}</td><td>${esc(lb || nm)}</td></tr>`).join('')}</table>
+          <p>โดยออกแบบ model, provider และ UI ให้แอปเพิ่ม แสดง แก้ไข และลบ${esc(n.th)}ใน SQLite ได้ถูกต้องตามเนื้อหาในบทเรียน</p>
+        </div>
+      </div>
+      <h3>สิ่งที่เราต้องทำ เรียงตามลำดับ</h3>
+      <ol class="todo">${todo.map(([t, d]) => `<li><b>${esc(t)}</b><span>${esc(d)}</span></li>`).join('')}</ol>
+      <p class="hint">ลองกดเปลี่ยน entity ที่แถบด้านบน ตัวอย่างโจทย์และโค้ดทั้งเว็บจะเปลี่ยนตาม ทุก entity ใช้โครงเดียวกันหมด ต่างกันแค่ชื่อคลาสกับฟิลด์ เรียนแบบเดียวก็ทำได้ทุกโจทย์</p>
+      ${nextBtn('sec-path', 'ต่อไป: แผนการอ่านคืนนี้', 'อ่านอะไรก่อนหลัง ใช้เวลาเท่าไร')}
+    </div>`;
   }
 
   /* ---- section: reading path ---- */
