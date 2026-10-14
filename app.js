@@ -842,6 +842,7 @@ IconButton(
       <div class="lesson card">
         <h2>ส่งงานด้วย GitHub repo แบบ private</h2>
         <p class="lede">ทำตามลำดับนี้ตั้งแต่ต้นชั่วโมง ถ้า push ไม่ผ่านจะได้มีเวลาแก้</p>
+        <p class="panel" style="margin:0 0 8px;font-size:15.5px">ซ้อมก่อนสอบได้กับ repo จำลอง <a href="https://github.com/bvnixx649/mad-quiz-starter" target="_blank" rel="noopener">github.com/bvnixx649/mad-quiz-starter</a> เป็นแอปรายจ่ายที่ใช้ SQLite + Provider แล้ว ใช้ URL นี้แทน URL ของอาจารย์ในขั้นที่ 1 แล้วทำตามทุกขั้น (ตอนซ้อมเพิ่ม collaborator เป็นเพื่อนแทน)</p>
         <h3>1. เอาโปรเจกต์ตั้งต้นลงเครื่อง</h3>
         ${bash(`git clone <URL ที่อาจารย์ให้> quiz
 cd quiz
