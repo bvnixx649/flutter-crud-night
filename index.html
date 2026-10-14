@@ -119,6 +119,27 @@ main{padding-bottom:80px}
 .note p:last-child{margin-bottom:0}
 .note b{color:var(--ink)}
 
+
+/* reading path */
+.route{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.route li{display:grid;grid-template-columns:1fr 52px;gap:8px;align-items:stretch}
+.pgo{display:grid;grid-template-columns:40px 1fr auto;gap:14px;align-items:center;text-align:left;border:0;background:var(--surface-2);border-radius:14px;padding:12px 16px;transition:background-color .15s ease,transform .15s ease}
+.pgo:hover{background:var(--surface-3)}
+.pgo:active{transform:scale(.99)}
+.pn{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font-weight:700;background:var(--accent-soft);color:var(--accent-strong)}
+.pt{display:grid;min-width:0}
+.pt b{font-weight:600;font-size:16px;line-height:1.45}
+.pt span{font-size:14px;color:var(--muted);line-height:1.5}
+.pm{font-size:13.5px;color:var(--muted);white-space:nowrap}
+.pck{display:grid;place-items:center;background:var(--surface-2);border-radius:14px;cursor:pointer;position:relative}
+.pck input{position:absolute;opacity:0;width:100%;height:100%;margin:0;cursor:pointer}
+.pck i{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;box-shadow:inset 0 0 0 2px var(--line);color:transparent;font-size:17px;transition:background-color .15s ease}
+.route li.done .pck i{background:var(--accent);box-shadow:none;color:var(--accent-ink)}
+.route li.done .pn{background:var(--accent);color:var(--accent-ink)}
+.route li.done .pt b{color:var(--muted)}
+.pck input:focus-visible + i{outline:2px solid var(--accent);outline-offset:2px}
+.pfoot{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;margin-top:20px;color:var(--ink-2)}
+
 /* map diagram */
 .mwrap{max-width:680px;margin:0 auto}
 .mbox{display:grid;gap:1px;text-align:left;border:0;background:var(--surface);border-radius:12px;padding:12px 16px;box-shadow:inset 0 0 0 1.5px var(--accent-line);width:100%;transition:box-shadow .15s ease,transform .15s ease}
@@ -291,6 +312,10 @@ dialog::backdrop{background:rgb(0 0 0 / .45)}
   .frow .lbl{grid-column:1 / 3}
   .qtext{font-size:18px}
   .entbar label{display:none}
+  .pgo{grid-template-columns:32px 1fr;gap:10px;padding:12px}
+  .pn{width:30px;height:30px;font-size:14px}
+  .pm{grid-column:2}
+  .route li{grid-template-columns:1fr 46px}
   .entbar .wrap{gap:8px}
   .chips{flex:1 1 100%}
   .mode{width:100%}

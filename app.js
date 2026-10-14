@@ -114,8 +114,8 @@
     <section class="hero"><div class="wrap">
       <div>
         <h1>เขียนแอป CRUD ด้วย Flutter + SQLite ให้ทันสอบพรุ่งนี้</h1>
-        <p>เริ่มจากศูนย์ ไล่ทีละไฟล์ เลือก entity ที่อาจารย์ให้ แล้วโค้ดทั้งหมดจะเปลี่ยนตามให้ดู</p>
-        <div class="ctas"><a class="btn btn-light" href="#learn" data-go="flow">เริ่มเรียน <i class="ph ph-arrow-down"></i></a><a class="btn btn-ghost" href="#practice">ไปฝึก</a></div>
+        <p>quiz พรุ่งนี้ให้เขียนแอปเพิ่ม ดู แก้ ลบข้อมูลของ entity ที่อาจารย์กำหนด เว็บนี้สอนจากศูนย์ เริ่มจากแผนการอ่านด้านล่าง</p>
+        <div class="ctas"><a class="btn btn-light" href="#learn" data-go="sec-path">เริ่มเรียน <i class="ph ph-arrow-down"></i></a><a class="btn btn-ghost" href="#practice">ไปฝึก</a></div>
       </div>
       <div>${heroSVG}</div>
     </div></section>
@@ -128,6 +128,7 @@
       </div>
     </div></div>
     <main class="wrap">
+      <div class="lesson" id="sec-path"></div>
       <div class="lesson" id="sec-flow"></div>
       <div class="lesson" id="sec-map"></div>
       <div class="lesson" id="sec-dart"></div>
@@ -152,10 +153,51 @@
     const ent = currentEnt();
     const { n, files } = Gen.build(ent, state.mode);
     renderChips();
+    renderPath(n);
     renderFlow(ent, n);
     renderMap(n);
     renderFiles(n, files);
     renderMulti(n);
+  }
+
+  /* ---- section: reading path ---- */
+  function pathSteps(n) {
+    const helper = state.mode === 'helper';
+    return [
+      ['sec-flow', 'เล่นแอปจำลอง ดูว่าต้องทำแอปแบบไหน', 'กด + เพิ่ม แตะแถวเพื่อแก้ กดถังขยะ แล้วดูว่าข้อมูลไปอยู่ไหน', 10],
+      ['sec-map', 'ดูภาพรวม 4 ชั้นของแอป', 'หน้าจอ, Provider, Model, SQLite ใครคุยกับใคร', 5],
+      ['sec-dart', 'ปูพื้น Dart และ Flutter', 'ถ้าเคยเขียน Dart แล้ว ข้ามได้', 20],
+      ['file-model', `เขียน Model: คลาส ${n.C}`, 'ฟิลด์, toMap, fromMap และการแปลงชนิดข้อมูล', 15],
+      ...(helper ? [['file-helper', 'เขียน DatabaseHelper', 'เปิดฐานข้อมูล, CREATE TABLE, CRUD', 20]] : []),
+      ['file-provider', `เขียน ${n.Prov}`, helper ? 'ถือรายการและเรียก helper' : 'เปิดฐานข้อมูล, CREATE TABLE, CRUD และ notifyListeners', helper ? 10 : 25],
+      ['file-main', 'ลงทะเบียน provider ใน main.dart', 'สั้นสุดแต่ลืมบ่อยสุด', 5],
+      ['file-list', 'เขียนหน้ารายการ', 'Consumer, ListView.builder, ปุ่มลบ, ปุ่ม +', 15],
+      ['file-form', 'เขียนหน้าฟอร์ม', 'Form, validator, ใช้หน้าเดียวทั้งเพิ่มและแก้', 25],
+      ['sec-multi', 'ต่อเข้ากับโปรเจกต์ที่อาจารย์ให้', 'MultiProvider และไฟล์ .db แยก', 5],
+      ['practice:fill', 'ฝึกเติมโค้ด อย่างน้อย 5 รอบ', 'แท็บ ฝึก กดสุ่มใหม่ไปเรื่อยๆ', 20],
+      ['practice:quiz', 'ทำควิซ 20 ข้อ', 'ข้อไหนผิด กลับไปอ่านไฟล์นั้นซ้ำ', 15],
+      ['exam', 'ก่อนนอน: อ่านแท็บ วันสอบ', 'ขั้นตอน git, การแบ่งเวลา, error ที่เจอบ่อย', 10],
+    ];
+  }
+  function renderPath(n) {
+    const steps = pathSteps(n), done = store.get('done', {});
+    const total = steps.reduce((a, s) => a + s[3], 0);
+    const left = steps.filter(s => !done[s[0]]).reduce((a, s) => a + s[3], 0);
+    const cnt = steps.filter(s => done[s[0]]).length;
+    const first = steps.find(s => !done[s[0]]);
+    $('#sec-path').innerHTML = `<div class="card">
+      <h2>อ่านตามลำดับนี้ ทั้งหมดประมาณ ${Math.round(total / 60 * 2) / 2} ชั่วโมง</h2>
+      <p class="lede">กดที่หัวข้อเพื่อไปอ่าน อ่านจบแล้วติ๊กวงกลมด้านขวา เว็บจะจำไว้ให้ เปิดใหม่ก็ทำต่อได้ ถ้าเวลาน้อย ทำข้อ 1, ข้อที่เป็นการเขียนไฟล์ และฝึกเติมโค้ดก็พอ</p>
+      <ol class="route">${steps.map((s, i) => `<li class="${done[s[0]] ? 'done' : ''}">
+        <button class="pgo" data-jump="${s[0]}"><span class="pn">${i + 1}</span><span class="pt"><b>${esc(s[1])}</b><span>${esc(s[2])}</span></span><span class="pm">${s[3]} นาที</span></button>
+        <label class="pck" aria-label="อ่านจบแล้ว"><input type="checkbox" data-done="${s[0]}" ${done[s[0]] ? 'checked' : ''}><i class="ph ph-check"></i></label>
+      </li>`).join('')}</ol>
+      <div class="pfoot"><span>เสร็จ ${cnt} จาก ${steps.length}${cnt < steps.length ? `, เหลือประมาณ ${left} นาที` : ''}</span>
+      ${first ? `<button class="btn btn-acc" data-jump="${first[0]}">${cnt ? 'อ่านต่อ' : 'เริ่มข้อ 1'}: ${esc(first[1])} <i class="ph ph-arrow-right"></i></button>` : '<b>ครบทุกข้อแล้ว พร้อมสอบ</b>'}</div>
+    </div>`;
+    $$('[data-done]', $('#sec-path')).forEach(cb => cb.onchange = () => {
+      const d = store.get('done', {}); d[cb.dataset.done] = cb.checked; store.set('done', d); renderPath(n);
+    });
   }
 
   /* ---- section: map ---- */
@@ -862,6 +904,15 @@ git push`)}
   }
 
   document.addEventListener('click', e => {
+    const j = e.target.closest('[data-jump]');
+    if (j) {
+      const [tab, sub] = j.dataset.jump.split(':');
+      if (tab === 'practice' || tab === 'exam') {
+        location.hash = '#' + tab;
+        if (sub) setTimeout(() => $(`#ptabs [data-p="${sub}"]`)?.click(), 30);
+      } else go(tab);
+      return;
+    }
     const g = e.target.closest('[data-go]');
     if (g) { e.preventDefault(); if (state.tab !== 'learn') location.hash = '#learn'; setTimeout(() => go(g.dataset.go), 30); return; }
     const t = e.target.closest('.seg button');
